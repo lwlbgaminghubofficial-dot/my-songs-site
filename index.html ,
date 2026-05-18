@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Playlist</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#121b2f;
+      --text:#e8eefc;
+      --muted:#9fb0d0;
+      --border:rgba(255,255,255,.08);
+      --accent:#6aa6ff;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    header{
+      padding:24px 16px;
+      border-bottom:1px solid var(--border);
+      position:sticky; top:0; background:rgba(11,18,32,.85); backdrop-filter: blur(10px);
+    }
+    header h1{margin:0; font-size:20px}
+    header p{margin:6px 0 0; color:var(--muted); font-size:13px}
+    main{max-width:980px; margin:0 auto; padding:18px 14px 40px;}
+    .grid{display:grid; gap:12px; grid-template-columns: 1fr;}
+    @media (min-width: 720px){
+      .grid{grid-template-columns: 1fr;}
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px;
+      display:flex; gap:12px;
+      align-items:flex-start;
+    }
+    .meta{flex:1}
+    .title{font-weight:700; font-size:15px; line-height:1.3}
+    .sub{margin-top:4px; color:var(--muted); font-size:13px}
+    .actions{display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-start}
+    .btn{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      text-decoration:none;
+      font-size:13px;
+      transition:.15s ease;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(106,166,255,.45)}
+    .badge{
+      font-size:12px; padding:5px 10px; border-radius:999px;
+      border:1px solid var(--border);
+      color:var(--muted);
+      background:rgba(255,255,255,.02);
+      margin-left:auto;
+      white-space:nowrap;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="playlistTitle">Playlist</h1>
+    <p>قائمة الأغاني مع أزرار لكل منصة</p>
+  </header>
+
+  <main>
+    <div class="grid" id="list"></div>
+  </main>
+
+  <script>
+    async function loadPlaylist(){
+      // تأكد أن ملف playlist.json في نفس الريبو
+      const res = await fetch('./playlist.json', { cache: 'no-store' });
+      if(!res.ok) throw new Error('لا يمكن تحميل playlist.json');
+      return res.json();
+    }
+
+    function makeButton({platform, url}){
+      if(!url) return null;
+      const a = document.createElement('a');
+      a.className = 'btn';
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.textContent = platform;
+      return a;
+    }
+
+    function render(data){
+      document.getElementById('playlistTitle').textContent = data.title || 'Playlist';
+      const list = document.getElementById('list');
+      list.innerHTML = '';
+
+      (data.items || []).forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+
+        const t = document.createElement('div');
+        t.className = 'title';
+        t.textContent = item.name || 'Untitled';
+
+        const s = document.createElement('div');
+        s.className = 'sub';
+        s.textContent = item.artist || '';
+
+        meta.appendChild(t);
+        meta.appendChild(s);
+
+        const actions = document.createElement('div');
+        actions.className = 'actions';
+
+        const bSpotify = makeButton({platform:'Spotify', url:item.spotifyUrl});
+        const bYtMusic = makeButton({platform:'YouTube Music', url:item.youtubeMusicUrl});
+
+        if(bSpotify) actions.appendChild(bSpotify);
+        if(bYtMusic) actions.appendChild(bYtMusic);
+
+        if(!bSpotify && !bYtMusic){
+          const badge = document.createElement('div');
+          badge.className = 'badge';
+          badge.textContent = 'لا توجد روابط';
+          card.appendChild(meta);
+          card.appendChild(badge);
+          list.appendChild(card);
+          return;
+        }
+
+        card.appendChild(meta);
+        card.appendChild(actions);
+
+        list.appendChild(card);
+      });
+    }
+
+    loadPlaylist()
+      .then(render)
+      .catch(err => {
+        console.error(err);
+        document.getElementById('list').innerHTML =
+          '<div class="card"><div class="meta"><div class="title">خطأ</div><div class="sub">تحقق من وجود playlist.json وروابط الأغاني.</div></div></div>';
+      });
+  </script>
+</body>
+</html>
