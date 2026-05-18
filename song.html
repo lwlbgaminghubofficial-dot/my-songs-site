@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>الأغاني</title>
+  <title>تفاصيل الأغنية</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body data-page="songs">
+<body data-page="song">
   <header class="nav">
     <div class="nav-inner">
       <div class="brand">
@@ -22,25 +22,26 @@
   </header>
 
   <main class="container">
-    <section class="hero" style="grid-template-columns: 1fr; padding-top: 0;">
-      <div class="hero-card">
-        <h1 class="h-title" style="margin-bottom: 6px;">قائمة الأغاني</h1>
-        <p class="h-sub">
-          ابحث باسم الأغنية أو الفنان، أو فلتر حسب الفنان.
-        </p>
+    <section class="detail" id="detail-root">
+      <div class="big-cover">
+        <img id="song-cover" src="" alt="">
+      </div>
 
-        <div class="search-row">
-          <input id="search" class="input" placeholder="ابحث..." />
-          <select id="filter" class="select"></select>
-          <div class="pill" style="display:flex; align-items:center;"> <span id="count">—</span></div>
+      <div class="panel">
+        <div class="kv">
+          <h2 id="song-title" class="title"></h2>
+          <p id="song-artist" class="artist"></p>
+          <div id="song-desc" class="desc"></div>
+        </div>
+
+        <div id="song-links" class="link-list"></div>
+        <div class="small-note">
+          سيتم فتح روابط التشغيل في نافذة جديدة. تأكد أن الروابط لديك رسمية ومسموح استخدامها.
         </div>
       </div>
     </section>
-
-    <section class="grid" id="grid"></section>
   </main>
 
   <script src="app.js"></script>
 </body>
 </html>
-
