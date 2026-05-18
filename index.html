@@ -1,1 +1,46 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>مكتبتي - أغاني</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="home">
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="logo"></div>
+        <div>مكتبتي ✨</div>
+      </div>
+
+      <nav class="nav-links">
+        <a class="pill" href="index.html">الرئيسية</a>
+        <a class="pill" href="songs.html">الأغاني</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-card">
+        <h1 class="h-title">واجهة عصرية لتجميع أغانيك بروابط رسمية</h1>
+        <p class="h-sub">
+          أضف بيانات الأغاني داخل <b>data.json</b>، والموقع سيعرضها بتصميم جميل ويحوّلك لصفحات التشغيل في YouTube / Spotify / SoundCloud وغيرها.
+        </p>
+        <div class="search-row">
+          <a class="btn" href="songs.html">استعرض جميع الأغاني →</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div style="font-weight:800; margin-bottom:10px;">مختارات</div>
+        <div id="featured-grid" class="grid" style="grid-template-columns: repeat(1,1fr); gap: 12px; margin-top: 0;"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
 
